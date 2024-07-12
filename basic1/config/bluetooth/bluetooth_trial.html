@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bluetooth Device Connection</title>
+</head>
+<body>
+    <button onclick="connectToDevice()">Connect to Bluetooth Device</button>
+
+    <script>
+        async function connectToDevice() {
+            try {
+                // Request Bluetooth device
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true, // Allow any Bluetooth device to connect
+                    optionalServices: ['service_uuid'] // Specify the UUID of the service you want to connect to
+                });
+
+                // Check if device needs pairing
+                if (device.gatt.connected === false && device.gatt.connectable === true) {
+                    // Pair the device
+                    await device.gatt.connect();
+                }
+
+                // Device is connected, perform further actions (e.g., data exchange)
+                console.log('Connected to device:', device.name);
+            } catch (error) {
+                console.error('Bluetooth connection error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
